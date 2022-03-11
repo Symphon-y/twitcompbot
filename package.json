@@ -1,8 +1,11 @@
 {
   "name": "bot---twitter-comp-comp-",
   "version": "1.0.0",
-  "description": "",
+  "description": "Automagically Searchs Twitter for Music Composition Competitions and Posts Them To Discord.",
   "main": "index.js",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "dev": "ts-node src/index.js",
     "build": "tsc",
