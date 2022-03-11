@@ -6,7 +6,6 @@
   "engines": {
     "node": "16.x"
   },
-
   "scripts": {
     "dev": "ts-node src/index.js",
     "build": "tsc",

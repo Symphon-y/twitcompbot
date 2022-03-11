@@ -2,10 +2,11 @@ require('dotenv').config();
 
 // General Dependencies
 const Discord = require('discord.js');
-const client = new Discord.Client();
 const Twit = require('twit');
 
-// Twit Dependencies
+// Establish Discord Client and Twitter Dependencies 
+const client = new Discord.Client();
+
 var T = new Twit({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
     consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
@@ -15,7 +16,7 @@ var T = new Twit({
     strictSSL: true,
 })
 
-// Discord Token
+// Discord Client Login
 client.login(process.env.DISCORD_TOKEN);
 
 
@@ -35,9 +36,8 @@ client.once('ready', () =>{
                     let tweetId = data.statuses[i].id_str
                     let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
 
-                    // Not Currently Using
-                    // let tweetText = data.statuses[i].text
-                    // let newTweet = `New tweet from ${userName}: link: ${tweetUrl}`
+                    // Variables Not Currently Using
+                        // let tweetText = data.statuses[i].text
             
                     // Send Tweet
                     channel.send(tweetUrl)
@@ -74,7 +74,6 @@ client.once('ready', () =>{
     getRequest();
 });
 
-// test change //
 // *** Example Object *** 
 
 // {
