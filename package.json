@@ -7,8 +7,8 @@
     "node": "16.x"
   },
   "scripts": {
-    "dev": "ts-node src/index.js",
-    "build": "tsc",
+    "dev": "node src/index.js",
+    "build": "node build/build.js",
     "test": "echo \"THIS IS AN ERROR: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -26,9 +26,7 @@
     "discord": "^0.8.2",
     "discord.js": "^12.5.3",
     "dotenv": "^16.0.0",
-    "needle": "^3.0.0",
     "node-fetch": "^3.2.0",
-    "puppeteer": "^13.4.1",
     "twit": "^2.2.11",
     "twitter": "^1.7.1"
   }
