@@ -24,7 +24,8 @@ client.login(process.env.DISCORD_TOKEN);
 client.once('ready', () =>{
 
     async function getRequest() {
-
+        let data; 
+        
         // #callforscores
         T.get('search/tweets', { q: '#callforscores', count: 10 }, function(err, data, response) {
             sendTweet(data);
