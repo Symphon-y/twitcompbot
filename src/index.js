@@ -27,9 +27,11 @@ client.once('ready', () =>{
 
         // Function to Send Tweets
         function sendTweet(tweetData){
+            let tweetDataLength = Number(tweetData['statuses'].length);
+            console.log(tweetDataLength)
 
             client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
-                for (var i = 0; i < tweetData.statuses.length ; i++){
+                for (var i = 0; i < tweetDataLength ; i++){
             
                     // Tweet Variabels
                     let userName = tweetData.statuses[i].user.screen_name
