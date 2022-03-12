@@ -25,31 +25,6 @@ client.once('ready', () =>{
 
     async function getRequest() {
 
-        // Function to Send Tweets
-        function sendTweet(data){
-
-            client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
-                if (data.statuses.length === undefined){
-                    console.log(`status length is undefined`)
-                } else {
-                    for (var i = 0; i < data.statuses.length ; i++){
-                
-                        // Tweet Variabels
-                        let userName = data.statuses[i].user.screen_name
-                        let tweetId = data.statuses[i].id_str
-                        let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
-
-                        // Variables Not Currently Using
-                            // let tweetText = data.statuses[i].text
-                
-                        // Send Tweet
-                        channel.send(tweetUrl)
-
-                    }
-                }
-            })
-        }
-
         // #callforscores
         T.get('search/tweets', { q: '#callforscores', count: 10 }, function(err, data, response) {
             sendTweet(data);
@@ -70,6 +45,27 @@ client.once('ready', () =>{
             sendTweet(data);
         })
 
+        // Function to Send Tweets
+        function sendTweet(data){
+
+            client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
+                for (var i = 0; i < data.statuses.length ; i++){
+            
+                    // Tweet Variabels
+                    let userName = data.statuses[i].user.screen_name
+                    let tweetId = data.statuses[i].id_str
+                    let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
+
+                    // Variables Not Currently Using
+                        // let tweetText = data.statuses[i].text
+            
+                    // Send Tweet
+                    channel.send(tweetUrl)
+
+                }
+            })
+        }
+        
         // Search Every 12 Hours
         setTimeout(function(){
             getRequest();
