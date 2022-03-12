@@ -24,31 +24,9 @@ client.login(process.env.DISCORD_TOKEN);
 client.once('ready', () =>{
 
     async function getRequest() {
-        let data; 
         
         // #callforscores
         T.get('search/tweets', { q: '#callforscores', count: 10 }, function(err, data, response) {
-            sendTweet(data);
-        })
-
-        // #compositioncompetition
-        T.get('search/tweets', { q: '#compositioncompetition', count: 10 }, function(err, data, response) {
-            sendTweet(data);
-        })
-
-        // #filmscoringcompetition
-        T.get('search/tweets', { q: '#filmscoringcompetition', count: 10 }, function(err, data, response) {
-            sendTweet(data);
-        })
-
-        // #scoringcompetition
-        T.get('search/tweets', { q: '#scoringcompetition', count: 10 }, function(err, data, response) {
-            sendTweet(data);
-        })
-
-        // Function to Send Tweets
-        function sendTweet(data){
-
             client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
                 for (var i = 0; i < data.statuses.length ; i++){
             
@@ -65,7 +43,88 @@ client.once('ready', () =>{
 
                 }
             })
-        }
+        })
+
+        // #compositioncompetition
+        T.get('search/tweets', { q: '#compositioncompetition', count: 10 }, function(err, data, response) {
+            client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
+                for (var i = 0; i < data.statuses.length ; i++){
+            
+                    // Tweet Variabels
+                    let userName = data.statuses[i].user.screen_name
+                    let tweetId = data.statuses[i].id_str
+                    let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
+
+                    // Variables Not Currently Using
+                        // let tweetText = data.statuses[i].text
+            
+                    // Send Tweet
+                    channel.send(tweetUrl)
+
+                }
+            })
+        })
+
+        // #filmscoringcompetition
+        T.get('search/tweets', { q: '#filmscoringcompetition', count: 10 }, function(err, data, response) {
+            client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
+                for (var i = 0; i < data.statuses.length ; i++){
+            
+                    // Tweet Variabels
+                    let userName = data.statuses[i].user.screen_name
+                    let tweetId = data.statuses[i].id_str
+                    let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
+
+                    // Variables Not Currently Using
+                        // let tweetText = data.statuses[i].text
+            
+                    // Send Tweet
+                    channel.send(tweetUrl)
+
+                }
+            })
+        })
+
+        // #scoringcompetition
+        T.get('search/tweets', { q: '#scoringcompetition', count: 10 }, function(err, data, response) {
+            client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
+                for (var i = 0; i < data.statuses.length ; i++){
+            
+                    // Tweet Variabels
+                    let userName = data.statuses[i].user.screen_name
+                    let tweetId = data.statuses[i].id_str
+                    let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
+
+                    // Variables Not Currently Using
+                        // let tweetText = data.statuses[i].text
+            
+                    // Send Tweet
+                    channel.send(tweetUrl)
+
+                }
+            })
+        })
+
+        // Function to Send Tweets
+        // function sendTweet(data){
+
+        //     client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
+        //         for (var i = 0; i < data.statuses.length ; i++){
+            
+        //             // Tweet Variabels
+        //             let userName = data.statuses[i].user.screen_name
+        //             let tweetId = data.statuses[i].id_str
+        //             let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
+
+        //             // Variables Not Currently Using
+        //                 // let tweetText = data.statuses[i].text
+            
+        //             // Send Tweet
+        //             channel.send(tweetUrl)
+
+        //         }
+        //     })
+        // }
         
         // Search Every 12 Hours
         setTimeout(function(){
