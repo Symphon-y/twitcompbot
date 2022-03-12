@@ -29,19 +29,23 @@ client.once('ready', () =>{
         function sendTweet(data){
 
             client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
-                for (var i = 0; i < data.statuses.length ; i++){
-            
-                    // Tweet Variabels
-                    let userName = data.statuses[i].user.screen_name
-                    let tweetId = data.statuses[i].id_str
-                    let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
+                if (data.statuses.length === undefined){
+                    console.log(`status length is undefined`)
+                } else {
+                    for (var i = 0; i < data.statuses.length ; i++){
+                
+                        // Tweet Variabels
+                        let userName = data.statuses[i].user.screen_name
+                        let tweetId = data.statuses[i].id_str
+                        let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
 
-                    // Variables Not Currently Using
-                        // let tweetText = data.statuses[i].text
-            
-                    // Send Tweet
-                    channel.send(tweetUrl)
+                        // Variables Not Currently Using
+                            // let tweetText = data.statuses[i].text
+                
+                        // Send Tweet
+                        channel.send(tweetUrl)
 
+                    }
                 }
             })
         }
