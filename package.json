@@ -9,6 +9,7 @@
   },
   "scripts": {
     "dev": "ts-node src/index.js",
+    "start": "node src/index.js",
     "build": "tsc",
     "test": "echo \"THIS IS AN ERROR: no test specified\" && exit 1"
   },
