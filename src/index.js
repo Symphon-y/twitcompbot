@@ -38,28 +38,26 @@ client.once('ready', () =>{
                 for (var i = 0; i < tweetDataLength ; i++){
             
                      // Tweet Variabels
-                     let userName = tweetData.statuses[i].user.screen_name
-                     let tweetId = tweetData.statuses[i].id_str
-                     let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
-                     let tweetTime = tweetData.statuses[i].created_at
-                     let tweetTimeShort = tweetTime.substring(0,19)
-                     let tweetText = tweetData.statuses[i].text
-                     let tweetPfp = tweetData.statuses[i].user.profile_image_url
-                     let tweetPfpBig = tweetPfp.replace("normal", "400x400")
-                     
-                     const embedTweet = new Discord.MessageEmbed()
-                         .setColor(`#1b95e6`)
-                         .setAuthor(`${userName}`,`${tweetPfpBig}`, `${tweetUrl}`)
-                         //.setTitle(`${userName}`)
-                         .setURL(`${tweetUrl}`)
-                         .setDescription(`${tweetText}`)
-                         //.setThumbnail(`${tweetPfpBig}`)
-                         .setFooter(`${tweetTimeShort}`)
-                         //.setTimestamp(`${tweetTime}`)
- 
-                     channel.send(embedTweet)
+                    let userName = tweetData.statuses[i].user.screen_name
+                    let tweetId = tweetData.statuses[i].id_str
+                    let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
+                    let tweetTime = tweetData.statuses[i].created_at
+                    let tweetTimeShort = tweetTime.substring(0,19)
+                    let tweetText = tweetData.statuses[i].text
+                    let tweetPfp = tweetData.statuses[i].user.profile_image_url
+                    let tweetPfpBig = tweetPfp.replace("normal", "400x400")
                     
+                            const embedTweet = new Discord.MessageEmbed()
+                            .setColor(`#1b95e6`)
+                            .setAuthor(`${userName}`,`${tweetPfpBig}`, `${tweetUrl}`)
+                            //.setTitle(`${userName}`)
+                            .setURL(`${tweetUrl}`)
+                            .setDescription(`${tweetText}`)
+                            //.setThumbnail(`${tweetPfpBig}`)
+                            .setFooter(`${tweetTimeShort}`)
+                            //.setTimestamp(`${tweetTime}`)
 
+                    channel.send(embedTweet)
                 }
             })
         }
@@ -138,8 +136,6 @@ client.on('message', (message) => {
                         //.setTimestamp(`${tweetTime}`)
 
                     channel.send(embedTweet)
-                    
-                    //channel.send(tweetUrl)
 
                 }
             })
@@ -150,7 +146,6 @@ client.on('message', (message) => {
             let callForScoreData = data;
             sendTweet(callForScoreData);
         })
-    //message.reply(`You are trying to search for ${command}?`)
     };
 
     
