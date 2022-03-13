@@ -2,6 +2,15 @@ require('dotenv').config();
 
 // General Dependencies
 const Discord = require('discord.js');
+
+let prefix = '$';
+
+const {
+    Client,
+    Intents,
+    MessageEmbed
+} = require('discord.js');
+
 const Twit = require('twit');
 
 // Establish Discord Client and Twitter Dependencies 
@@ -16,11 +25,7 @@ var T = new Twit({
     strictSSL: true,
 })
 
-// Discord Client Login
-client.login(process.env.DISCORD_TOKEN);
-
-
-// Discord Bot 
+// Discord client 
 client.once('ready', () =>{
 
     async function getRequest() {
@@ -28,21 +33,32 @@ client.once('ready', () =>{
         // Function to Send Tweets
         function sendTweet(tweetData){
             let tweetDataLength = Number(tweetData['statuses'].length);
-            console.log(tweetDataLength)
 
             client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
                 for (var i = 0; i < tweetDataLength ; i++){
             
-                    // Tweet Variabels
-                    let userName = tweetData.statuses[i].user.screen_name
-                    let tweetId = tweetData.statuses[i].id_str
-                    let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
-
-                    // Variables Not Currently Using
-                        // let tweetText = data.statuses[i].text
-            
-                    // Send Tweet
-                    channel.send(tweetUrl)
+                     // Tweet Variabels
+                     let userName = tweetData.statuses[i].user.screen_name
+                     let tweetId = tweetData.statuses[i].id_str
+                     let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
+                     let tweetTime = tweetData.statuses[i].created_at
+                     let tweetTimeShort = tweetTime.substring(0,19)
+                     let tweetText = tweetData.statuses[i].text
+                     let tweetPfp = tweetData.statuses[i].user.profile_image_url
+                     let tweetPfpBig = tweetPfp.replace("normal", "400x400")
+                     
+                     const embedTweet = new Discord.MessageEmbed()
+                         .setColor(`#1b95e6`)
+                         .setAuthor(`${userName}`,`${tweetPfpBig}`, `${tweetUrl}`)
+                         //.setTitle(`${userName}`)
+                         .setURL(`${tweetUrl}`)
+                         .setDescription(`${tweetText}`)
+                         //.setThumbnail(`${tweetPfpBig}`)
+                         .setFooter(`${tweetTimeShort}`)
+                         //.setTimestamp(`${tweetTime}`)
+ 
+                     channel.send(embedTweet)
+                    
 
                 }
             })
@@ -79,6 +95,71 @@ client.once('ready', () =>{
     }
     getRequest();
 });
+
+client.on('message', (message) => {
+
+    if (!message.content.startsWith(prefix) || message.author.bot){
+        return;
+    }
+
+    // Custom Search From User Input
+    let searchString = `search`
+
+    if (message.content.startsWith(`${prefix}${searchString}`)){
+    const args = message.content.slice(prefix.length + searchString.length).trim().split(' ');
+    const command = args.join(' ').toLowerCase();
+        
+        // Function to Send Tweets
+        function sendTweet(tweetData){
+            let tweetDataLength = Number(tweetData['statuses'].length);
+
+            client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
+                for (var i = 0; i < tweetDataLength ; i++){
+                   
+
+                    // Tweet Variabels
+                    let userName = tweetData.statuses[i].user.screen_name
+                    let tweetId = tweetData.statuses[i].id_str
+                    let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
+                    let tweetTime = tweetData.statuses[i].created_at
+                    let tweetTimeShort = tweetTime.substring(0,19)
+                    let tweetText = tweetData.statuses[i].text
+                    let tweetPfp = tweetData.statuses[i].user.profile_image_url
+                    let tweetPfpBig = tweetPfp.replace("normal", "400x400")
+                    
+                    const embedTweet = new Discord.MessageEmbed()
+                        .setColor(`#1b95e6`)
+                        .setAuthor(`${userName}`,`${tweetPfpBig}`, `${tweetUrl}`)
+                        //.setTitle(`${userName}`)
+                        .setURL(`${tweetUrl}`)
+                        .setDescription(`${tweetText}`)
+                        //.setThumbnail(`${tweetPfpBig}`)
+                        .setFooter(`${tweetTimeShort}`)
+                        //.setTimestamp(`${tweetTime}`)
+
+                    channel.send(embedTweet)
+                    
+                    //channel.send(tweetUrl)
+
+                }
+            })
+        }
+
+        // Custom Search
+        T.get('search/tweets', { q: `${command}`, count: 10 }, function(err, data, response) {
+            let callForScoreData = data;
+            sendTweet(callForScoreData);
+        })
+    //message.reply(`You are trying to search for ${command}?`)
+    };
+
+    
+});
+
+// Discord Client Login
+client.login(process.env.DISCORD_TOKEN);
+
+
 
 // *** Example Object *** 
 
@@ -127,3 +208,49 @@ client.once('ready', () =>{
 //     }
 //   }
   
+
+// *** Example User Object *** 
+// id: 51831670,
+//   id_str: '51831670',
+//   name: 'Travis Redden',
+//   screen_name: 'Travis_Redden',
+//   location: 'The Woodlands, Texas',
+//   description: 'SHSU Alumni • Graduate Student • Composer',
+//   url: null,
+//   entities: { description: { urls: [] } },
+//   protected: false,
+//   followers_count: 68,
+//   friends_count: 61,
+//   listed_count: 3,
+//   created_at: 'Sun Jun 28 20:21:36 +0000 2009',
+//   favourites_count: 65,
+//   utc_offset: null,
+//   time_zone: null,
+//   geo_enabled: true,
+//   verified: false,
+//   statuses_count: 10,
+//   lang: null,
+//   contributors_enabled: false,
+//   is_translator: false,
+//   is_translation_enabled: false,
+//   profile_background_color: '352726',
+//   profile_background_image_url: 'http://abs.twimg.com/images/themes/theme5/bg.gif',
+//   profile_background_image_url_https: 'https://abs.twimg.com/images/themes/theme5/bg.gif',
+//   profile_background_tile: false,
+//   profile_image_url: 'http://pbs.twimg.com/profile_images/1439432769277399048/IxXlV4Bl_400x400.jpg',
+//   profile_image_url_https: 'https://pbs.twimg.com/profile_images/1439432769277399048/IxXlV4Bl_normal.jpg',
+//   profile_banner_url: 'https://pbs.twimg.com/profile_banners/51831670/1359937552',
+//   profile_link_color: '917A83',
+//   profile_sidebar_border_color: 'FFFFFF',
+//   profile_sidebar_fill_color: '000000',
+//   profile_text_color: 'EB0E0E',
+//   profile_use_background_image: true,
+//   has_extended_profile: false,
+//   default_profile: false,
+//   default_profile_image: false,
+//   following: false,
+//   follow_request_sent: false,
+//   notifications: false,
+//   translator_type: 'none',
+//   withheld_in_countries: []
+// }

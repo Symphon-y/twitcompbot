@@ -13,9 +13,16 @@
     "build": "tsc",
     "test": "echo \"THIS IS AN ERROR: no test specified\" && exit 1"
   },
-  "keywords": ["Bot","twitter", "discord", "composition", "competition", "composition"],
+  "keywords": [
+    "Bot",
+    "twitter",
+    "discord",
+    "composition",
+    "competition",
+    "composition"
+  ],
   "homepage": "https://github.com/Symphon-y/twitcompbot#compcompbot",
-  "bugs":{
+  "bugs": {
     "url": "https://github.com/Symphon-y/twitcompbot#compcompbot",
     "email": "travisredden@outlook.com"
   },
@@ -27,41 +34,40 @@
     "tsc-node": "^0.0.3",
     "typescript": "^4.6.2"
   },
-    "funding": [
-      {
-        "type" : "OpenCollective",
-        "url" : " https://opencollective.com/date-fns"
-      },
-      {
-        "type" : "OpenCollective",
-        "url" : " https://opencollective.com/node-fetch"
-      },
-
-      {
-        "type" : "individual",
-        "url" : "https://github.com/sponsors/jimmywarting"
-      },
-      {
-        "type" : "individual",
-        "url" : "https://github.com/sponsors/RubenVerborgh"
-      },
-      {
-        "type" : "individual",
-        "url" : "https://github.com/sponsors/isaacs"
-      },
-      {
-        "type" : "individual",
-        "url" : "https://github.com/sponsors/sindresorhus"
-      },
-      {
-        "type" : "individual",
-        "url" : "https://github.com/sponsors/feross"
-      },
-      {
-        "type" : "individual",
-        "url" : "https://github.com/sponsors/epoberezkin"
-      }
-    ],
+  "funding": [
+    {
+      "type": "OpenCollective",
+      "url": " https://opencollective.com/date-fns"
+    },
+    {
+      "type": "OpenCollective",
+      "url": " https://opencollective.com/node-fetch"
+    },
+    {
+      "type": "individual",
+      "url": "https://github.com/sponsors/jimmywarting"
+    },
+    {
+      "type": "individual",
+      "url": "https://github.com/sponsors/RubenVerborgh"
+    },
+    {
+      "type": "individual",
+      "url": "https://github.com/sponsors/isaacs"
+    },
+    {
+      "type": "individual",
+      "url": "https://github.com/sponsors/sindresorhus"
+    },
+    {
+      "type": "individual",
+      "url": "https://github.com/sponsors/feross"
+    },
+    {
+      "type": "individual",
+      "url": "https://github.com/sponsors/epoberezkin"
+    }
+  ],
   "dependencies": {
     "axios": "^0.26.0",
     "date-fns": "^2.28.0",
@@ -70,6 +76,7 @@
     "dotenv": "^16.0.0",
     "needle": "^3.0.0",
     "node-fetch": "^3.2.0",
+    "node.js": "^0.0.1-security",
     "puppeteer": "^13.4.1",
     "twit": "^2.2.11",
     "twitter": "^1.7.1"
