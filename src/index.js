@@ -86,6 +86,24 @@ client.once('ready', () =>{
             sendTweet(scoringCompetitionData);
         })
 
+        // #scoringcontest
+        T.get('search/tweets', { q: '#scoringcontest', count: 10 }, function(err, data, response) {
+            let scoringContestData = data;
+            sendTweet(scoringContestData);
+        })
+
+        // #filmscoringcontest
+        T.get('search/tweets', { q: '#filmscoringcontest', count: 10 }, function(err, data, response) {
+            let filmScoringContestData = data;
+            sendTweet(filmScoringContestData);
+        })
+
+        // #compositioncontest
+        T.get('search/tweets', { q: '#compositioncontest', count: 10 }, function(err, data, response) {
+            let compositionContestData = data;
+            sendTweet(compositionContestData);
+        })
+
         // Search Every 12 Hours
         setTimeout(function(){
             getRequest();
