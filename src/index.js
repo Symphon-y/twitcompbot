@@ -91,7 +91,7 @@ client.once('ready', () =>{
         // Search Every 12 Hours
         setTimeout(function(){
             getRequest();
-        }, 60*43200);
+        }, 100*43200);
     }
     getRequest();
 });
