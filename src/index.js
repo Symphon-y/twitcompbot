@@ -27,7 +27,7 @@ var T = new Twit({
 
 // Discord client 
 client.once('ready', () =>{
-    
+
     client.on('message', message =>{
         if (message.content === `${prefix}setfeed`){
     
@@ -119,7 +119,7 @@ client.once('ready', () =>{
                 // Search Every 12 Hours
                 setTimeout(function(){
                     getRequest();
-                }, 3000); //100*43200);
+                }, 100*43200);
             }
             getRequest();
         }
