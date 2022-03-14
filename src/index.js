@@ -27,6 +27,7 @@ var T = new Twit({
 
 // Discord client 
 client.once('ready', () =>{
+    
     client.on('message', message =>{
         if (message.content === `${prefix}setfeed`){
     
