@@ -27,98 +27,102 @@ var T = new Twit({
 
 // Discord client 
 client.once('ready', () =>{
+    client.on('message', message =>{
+        if (message.content === `${prefix}setfeed`){
+    
+            let tweetCache = {}
 
-    let tweetCache = {}
+            async function getRequest() {
 
-    async function getRequest() {
+                // Function to Send Tweets
+                function sendTweet(tweetData){
 
-        // Function to Send Tweets
-        function sendTweet(tweetData){
-
-            client.channels.fetch(process.env.DISCORD_CHANNEL_ID).then(channel =>{
-                for (var i = 0; i < tweetData.statuses?.length ; i++){
                     
-                    // Tweet Variabels
-                    let userName = tweetData.statuses[i]?.user.screen_name
-                    let tweetId = tweetData.statuses[i]?.id_str
-                    let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
-                    let tweetTime = tweetData.statuses[i]?.created_at
-                    let tweetTimeShort = tweetTime?.substring(0,19)
-                    let tweetText = tweetData.statuses[i]?.text
-                    let tweetPfp = tweetData.statuses[i]?.user.profile_image_url
-                    let tweetPfpBig = tweetPfp?.replace("normal", "400x400")
-                    
-                    if (tweetCache[tweetData.statuses[i]?.id_str]){
-                        continue;
-                    }
+                        for (var i = 0; i < tweetData.statuses?.length ; i++){
+                            
+                            // Tweet Variabels
+                            let userName = tweetData.statuses[i]?.user.screen_name
+                            let tweetId = tweetData.statuses[i]?.id_str
+                            let tweetUrl = `https://www.twitter.com/${userName}/status/${tweetId}`
+                            let tweetTime = tweetData.statuses[i]?.created_at
+                            let tweetTimeShort = tweetTime?.substring(0,19)
+                            let tweetText = tweetData.statuses[i]?.text
+                            let tweetPfp = tweetData.statuses[i]?.user.profile_image_url
+                            let tweetPfpBig = tweetPfp?.replace("normal", "400x400")
+                            
+                            if (tweetCache[tweetData.statuses[i]?.id_str]){
+                                continue;
+                            }
 
 
-                        const embedTweet = new Discord.MessageEmbed()
-                            .setColor(`#1b95e6`)
-                            .setAuthor(`${userName}`,`${tweetPfpBig}`, `${tweetUrl}`)
-                            //.setTitle(`${userName}`)
-                            .setURL(`${tweetUrl}`)
-                            .setDescription(`${tweetText}`)
-                            //.setThumbnail(`${tweetPfpBig}`)
-                            .setFooter(`${tweetTimeShort}`)
-                            //.setTimestamp(`${tweetTime}`)
+                                const embedTweet = new Discord.MessageEmbed()
+                                    .setColor(`#1b95e6`)
+                                    .setAuthor(`${userName}`,`${tweetPfpBig}`, `${tweetUrl}`)
+                                    //.setTitle(`${userName}`)
+                                    .setURL(`${tweetUrl}`)
+                                    .setDescription(`${tweetText}`)
+                                    //.setThumbnail(`${tweetPfpBig}`)
+                                    .setFooter(`${tweetTimeShort}`)
+                                    //.setTimestamp(`${tweetTime}`)
 
-                        tweetCache[tweetData.statuses[i]?.id_str] = true;
+                                tweetCache[tweetData.statuses[i]?.id_str] = true;
+                                
+                                message.channel.send(embedTweet)
                         
-                        channel.send(embedTweet)
+                    }
                 }
-            })
-        }
 
 
-        // #callforscores
-        T.get('search/tweets', { q: '#callforscores', count: 5 }, function(err, data, response) {
-            let callForScoreData = data;
-            sendTweet(callForScoreData);
-        })
+                // #callforscores
+                T.get('search/tweets', { q: '#callforscores', count: 5 }, function(err, data, response) {
+                    let callForScoreData = data;
+                    sendTweet(callForScoreData);
+                })
 
-        // #compositioncompetition
-        T.get('search/tweets', { q: '#compositioncompetition', count: 5 }, function(err, data, response) {
-            let compositionCompetitionData = data;
-            sendTweet(compositionCompetitionData);
-        })
+                // #compositioncompetition
+                T.get('search/tweets', { q: '#compositioncompetition', count: 5 }, function(err, data, response) {
+                    let compositionCompetitionData = data;
+                    sendTweet(compositionCompetitionData);
+                })
 
-        // #filmscoringcompetition
-        T.get('search/tweets', { q: '#filmscoringcompetition', count: 5 }, function(err, data, response) {
-            let filmScoringCompetitionData = data;
-            sendTweet(filmScoringCompetitionData);
-        })
+                // #filmscoringcompetition
+                T.get('search/tweets', { q: '#filmscoringcompetition', count: 5 }, function(err, data, response) {
+                    let filmScoringCompetitionData = data;
+                    sendTweet(filmScoringCompetitionData);
+                })
 
-        // #scoringcompetition
-        T.get('search/tweets', { q: '#scoringcompetition', count: 5 }, function(err, data, response) {
-            let scoringCompetitionData = data;
-            sendTweet(scoringCompetitionData);
-        })
+                // #scoringcompetition
+                T.get('search/tweets', { q: '#scoringcompetition', count: 5 }, function(err, data, response) {
+                    let scoringCompetitionData = data;
+                    sendTweet(scoringCompetitionData);
+                })
 
-        // #scoringcontest
-        T.get('search/tweets', { q: '#scoringcontest', count: 5 }, function(err, data, response) {
-            let scoringContestData = data;
-            sendTweet(scoringContestData);
-        })
+                // #scoringcontest
+                T.get('search/tweets', { q: '#scoringcontest', count: 5 }, function(err, data, response) {
+                    let scoringContestData = data;
+                    sendTweet(scoringContestData);
+                })
 
-        // #filmscoringcontest
-        T.get('search/tweets', { q: '#filmscoringcontest', count: 5 }, function(err, data, response) {
-            let filmScoringContestData = data;
-            sendTweet(filmScoringContestData);
-        })
+                // #filmscoringcontest
+                T.get('search/tweets', { q: '#filmscoringcontest', count: 5 }, function(err, data, response) {
+                    let filmScoringContestData = data;
+                    sendTweet(filmScoringContestData);
+                })
 
-        // #compositioncontest
-        T.get('search/tweets', { q: '#compositioncontest', count: 5 }, function(err, data, response) {
-            let compositionContestData = data;
-            sendTweet(compositionContestData);
-        })
+                // #compositioncontest
+                T.get('search/tweets', { q: '#compositioncontest', count: 5 }, function(err, data, response) {
+                    let compositionContestData = data;
+                    sendTweet(compositionContestData);
+                })
 
-        // Search Every 12 Hours
-        setTimeout(function(){
+                // Search Every 12 Hours
+                setTimeout(function(){
+                    getRequest();
+                }, 3000); //100*43200);
+            }
             getRequest();
-        }, 3000); //100*43200);
-    }
-    getRequest();
+        }
+    });
 });
 
 client.on('message', (message) => {
@@ -171,7 +175,7 @@ client.on('message', (message) => {
         }
 
         // Custom Search
-        T.get('search/tweets', { q: `${command}`, count: 3 }, function(err, data, response) {
+        T.get('search/tweets', { q: `${command}`, count: 10 }, function(err, data, response) {
             let callForScoreData = data;
             sendTweet(callForScoreData);
         })
