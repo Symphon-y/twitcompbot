@@ -74,6 +74,7 @@
     "node-fetch": "^3.2.0",
     "node.js": "^0.0.1-security",
     "puppeteer": "^13.4.1",
+    "redis": "^4.0.4",
     "twit": "^2.2.11",
     "twitter": "^1.7.1"
   }
