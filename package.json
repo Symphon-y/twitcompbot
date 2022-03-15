@@ -3,10 +3,6 @@
   "version": "1.0.0",
   "description": "Automagically Searchs Twitter for Music Composition Competitions and Posts Them To Discord.",
   "main": "index.js",
-  "engines": {
-    "node": "16.x",
-    "npm": "8.x"
-  },
   "scripts": {
     "dev": "ts-node src/index.js",
     "start": "node src/index.js",
