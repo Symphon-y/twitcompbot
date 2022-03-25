@@ -2,8 +2,7 @@ require('dotenv').config();
 
 // General Dependencies
 const Discord = require('discord.js');
-
-let prefix = '$';
+const {google} = require('googleapis');
 
 const {
     Client,
@@ -13,8 +12,32 @@ const {
 
 const Twit = require('twit');
 
+// Discord Bot Prefix
+let prefix = '$';
+
+// Google Calendar Config
+const CREDENTIALS = JSON.parse(process.env.CREDENTIALS);
+const calendarId = process.env.CALENDAR_ID;
+
+// Google Cal API Settings
+const SCOPES = 'https://www.googleapis.com/auth/calendar';
+const calendar = google.calendar({version: "v3"})
+
+const auth = new google.auth.JWT(
+    CREDENTIALS.client_email,
+    null,
+    CREDENTIALS.private_key,
+    SCOPES
+);
+
+
+
+
 // Establish Discord Client and Twitter Dependencies 
 const client = new Discord.Client();
+
+// Discord Client Login
+client.login(process.env.DISCORD_TOKEN);
 
 var T = new Twit({
     consumer_key: process.env.TWITTER_CONSUMER_KEY,
@@ -25,7 +48,7 @@ var T = new Twit({
     strictSSL: true,
 })
 
-// Discord client 
+// Automatic Twitter Search 
 client.once('ready', () =>{
 
     client.on('message', message =>{
@@ -124,8 +147,91 @@ client.once('ready', () =>{
             getRequest();
         }
     });
+
+    client.on('message', message =>{
+        if(message.content === `${prefix}setcal`){
+
+            let calCache = {}
+
+            async function gcalRequest() {
+
+                let gCalTodaysDate = new Date();
+                let gCalYear = gCalTodaysDate.getFullYear();
+                let gCalDay = gCalTodaysDate.getDate();
+                let gCalMonthNum = gCalTodaysDate.getMonth();
+                let gCalMonths = [`01`, `02`, `03`, `04`, `05`, `06`, `07`, `08`, `09`, `10`, `11`, `12`]
+                let gCalMonth = gCalMonths[gCalMonthNum];
+                let gCalStart = `${gCalYear}-${gCalMonth}-${gCalDay}T00:00:00.000Z`
+                let gCalEnd =`${gCalYear}-${gCalMonth}-${gCalDay+7}T00:00:00.000Z`
+
+                let items;
+
+                // Calendar | Get Events
+                const getEvents = async (dateTimeStart, dateTimeEnd) => {
+
+                    try {
+                        let response = await calendar.events.list({
+                            auth: auth,
+                            calendarId: calendarId,
+                            timeMin: dateTimeStart,
+                            timeMax: dateTimeEnd,
+                            timeZone: 'CST/CDT'
+                        });
+                    
+                        items = response['data']['items'];
+                        return items;
+                    } catch (error) {
+                        console.log(`Error at getEvents --> ${error}`);
+                        return 0;
+                    }
+                };
+
+                getEvents(gCalStart, gCalEnd)
+                    .then((res) => {
+                        for (var i = 0; i < res.length; i++){
+                            let eventTitle = res[i]['summary']
+                            let eventDescription = res[i]['description']
+                            let eventLink = res[i]['htmlLink']
+                            let googleCalIcon = 'https://ssl.gstatic.com/calendar/images/dynamiclogo_2020q4/calendar_22_2x.png'
+                           
+                            let eventStartDate = res[i]['start']['date']
+                            let eventStartString = eventStartDate.toString();
+                            let eventStartYear = eventStartString.slice(0,4)
+                            let eventStartMonth = eventStartString.slice(5,7)
+                            let eventStartDay = eventStartString.slice(8)
+                            let eventDateString = `${eventStartMonth}-${eventStartDay}-${eventStartYear}`;
+
+                            const embedTweet = new Discord.MessageEmbed()
+                                .setColor(`#1b95e6`)
+                                .setAuthor(eventTitle, googleCalIcon, eventLink)
+                                .setDescription(eventDescription)
+                                .setFooter(`Date: ${eventDateString}`)
+                            
+                            calCache[res[i]['id']] = true;
+                            message.channel.send(embedTweet)
+                        }
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                    });
+
+                
+
+
+
+             // Search Every 24 Hours
+             setTimeout(function(){
+                gcalRequest();
+            }, 200*43200);
+        }
+        gcalRequest();
+        }
+    })
 });
 
+
+
+// Twitter Search From User Input
 client.on('message', (message) => {
 
     if (!message.content.startsWith(prefix) || message.author.bot){
@@ -168,7 +274,6 @@ client.on('message', (message) => {
                         //.setThumbnail(`${tweetPfpBig}`)
                         .setFooter(`${tweetTimeShort}`)
                         //.setTimestamp(`${tweetTime}`)
-
                     channel.send(embedTweet)
 
                 }
@@ -184,102 +289,3 @@ client.on('message', (message) => {
 
     
 });
-
-// Discord Client Login
-client.login(process.env.DISCORD_TOKEN);
-
-
-
-// *** Example Object *** 
-
-// {
-//     statuses: [
-//       {
-//         created_at: 'Wed Mar 09 07:24:00 +0000 2022',
-//         id: 1501458768126787600,
-//         id_str: '1501458768126787586',
-//         text: 'RT @JoesKenya: Ruaka branch is open for delivery’s and take away only from 10am til 10pm daily\n' +
-//           '\n' +
-//           'Gigiri- Ruaka Town- Banana- wangige- kiambu…',
-//         truncated: false,
-//         entities: [Object],
-//         metadata: [Object],
-//         source: '<a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>',
-//         in_reply_to_status_id: null,
-//         in_reply_to_status_id_str: null,
-//         in_reply_to_user_id: null,
-//         in_reply_to_user_id_str: null,
-//         in_reply_to_screen_name: null,
-//         user: [Object],
-//         geo: null,
-//         coordinates: null,
-//         place: null,
-//         contributors: null,
-//         retweeted_status: [Object],
-//         is_quote_status: false,
-//         retweet_count: 38,
-//         favorite_count: 0,
-//         favorited: false,
-//         retweeted: false,
-//         lang: 'en'
-//       }
-//     ],
-//     search_metadata: {
-//       completed_in: 0.043,
-//       max_id: 1501458768126787600,
-//       max_id_str: '1501458768126787586',
-//       next_results: '?max_id=1501458768126787585&q=banana%20since%3A2011-07-11&count=1&include_entities=1',
-//       query: 'banana+since%3A2011-07-11',
-//       refresh_url: '?since_id=1501458768126787586&q=banana%20since%3A2011-07-11&include_entities=1',
-//       count: 1,
-//       since_id: 0,
-//       since_id_str: '0'
-//     }
-//   }
-  
-
-// *** Example User Object *** 
-// id: 51831670,
-//   id_str: '51831670',
-//   name: 'Travis Redden',
-//   screen_name: 'Travis_Redden',
-//   location: 'The Woodlands, Texas',
-//   description: 'SHSU Alumni • Graduate Student • Composer',
-//   url: null,
-//   entities: { description: { urls: [] } },
-//   protected: false,
-//   followers_count: 68,
-//   friends_count: 61,
-//   listed_count: 3,
-//   created_at: 'Sun Jun 28 20:21:36 +0000 2009',
-//   favourites_count: 65,
-//   utc_offset: null,
-//   time_zone: null,
-//   geo_enabled: true,
-//   verified: false,
-//   statuses_count: 10,
-//   lang: null,
-//   contributors_enabled: false,
-//   is_translator: false,
-//   is_translation_enabled: false,
-//   profile_background_color: '352726',
-//   profile_background_image_url: 'http://abs.twimg.com/images/themes/theme5/bg.gif',
-//   profile_background_image_url_https: 'https://abs.twimg.com/images/themes/theme5/bg.gif',
-//   profile_background_tile: false,
-//   profile_image_url: 'http://pbs.twimg.com/profile_images/1439432769277399048/IxXlV4Bl_400x400.jpg',
-//   profile_image_url_https: 'https://pbs.twimg.com/profile_images/1439432769277399048/IxXlV4Bl_normal.jpg',
-//   profile_banner_url: 'https://pbs.twimg.com/profile_banners/51831670/1359937552',
-//   profile_link_color: '917A83',
-//   profile_sidebar_border_color: 'FFFFFF',
-//   profile_sidebar_fill_color: '000000',
-//   profile_text_color: 'EB0E0E',
-//   profile_use_background_image: true,
-//   has_extended_profile: false,
-//   default_profile: false,
-//   default_profile_image: false,
-//   following: false,
-//   follow_request_sent: false,
-//   notifications: false,
-//   translator_type: 'none',
-//   withheld_in_countries: []
-// }
