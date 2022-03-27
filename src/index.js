@@ -13,7 +13,7 @@ const {
 const Twit = require('twit');
 
 // Discord Bot Prefix
-let prefix = '?';
+let prefix = '$';
 
 // Google Calendar Config
 const CREDENTIALS = JSON.parse(process.env.CREDENTIALS);
