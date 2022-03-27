@@ -4,6 +4,14 @@ Composition Competition Bot for Discord
 About
     Discord bot for searching twitter automatically for music composition contests. Has the {limited} ability to search twitter for custom queries and has the ability to post contest events from google calender into discord. 
 
+Dependencies
+    Node.js
+    TypeScript.js
+    Discord Api
+    Google Api
+    Twitter Api
+    Twit
+
 - - - - - - - - - - 
 
 List of Commands

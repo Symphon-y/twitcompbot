@@ -13,7 +13,7 @@ const {
 const Twit = require('twit');
 
 // Discord Bot Prefix
-let prefix = '$';
+let prefix = '?';
 
 // Google Calendar Config
 const CREDENTIALS = JSON.parse(process.env.CREDENTIALS);
@@ -140,7 +140,7 @@ client.once('ready', () =>{
                 })
 
                 // Search Every 12 Hours
-                setTimeout(function(){
+                setInterval(function(){
                     getRequest();
                 }, 100*43200);
             }
@@ -220,7 +220,7 @@ client.once('ready', () =>{
 
 
              // Search Every 24 Hours
-             setTimeout(function(){
+             setInterval(function(){
                 gcalRequest();
             }, 200*43200);
         }
