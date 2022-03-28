@@ -161,11 +161,41 @@ client.once('ready', () =>{
                 let gCalMonthNum = gCalTodaysDate.getMonth();
                 let gCalMonths = [`01`, `02`, `03`, `04`, `05`, `06`, `07`, `08`, `09`, `10`, `11`, `12`]
                 let gCalMonth = gCalMonths[gCalMonthNum];
-                let gCalStart = `${gCalYear}-${gCalMonth}-${gCalDay}T00:00:00.000Z`
-                let gCalEnd =`${gCalYear}-${gCalMonth}-${gCalDay+7}T00:00:00.000Z`
+                let gCalStart = `${gCalYear}-${gCalMonth}-${gCalDay}T00:00:00+00:00`
+                let gCalEndDay = gCalDay+7;
+                let gCalEndDayOutput;
+                let gCalMonthEnd;
+                let gCalYearEnd = gCalYear;
 
-                let items;
+                // If Month is February And A Leap Year 
+                if (gCalMonth === '02' && gCalYear % 4 === 0 && gCalEndDay > 29){
+                    gCalEndDayOutput = gCalEndDay - 29
+                    gCalMonthEnd = gCalMonths[gCalMonthNum + 1]
+                } else
+                // If Month is February And Not A Leap Year 
+                if (gCalMonth === '02' && gCalYear % 4 === 1 && gCalEndDay > 28){
+                    gCalEndDayOutput = gCalEndDay - 28
+                    gCalMonthEnd = gCalMonths[gCalMonthNum + 1]
+                } else
+                // If Month Has 31 Days
+                if (gCalMonthNum === 0 || gCalMonthNum % 2 === 0 && gCalEndDay > 31){
+                    gCalEndDayOutput = gCalEndDay - 31
+                    gCalMonthEnd = gCalMonths[gCalMonthNum + 1]
+                } else
+                // If Month Has 30 Days
+                if (gCalMonthNum !== 0 && gCalMonthNum % 2 === 1 && gCalEndDay > 30){
+                    gCalEndDayOutput = gCalEndDay - 30
+                    gCalMonthEnd = gCalMonths[gCalMonthNum + 1]
+                };
 
+                // If Month is December and week extends beyond 31 days
+                if (gCalMonth === 12 && gCalEndDay > 31 ){
+                    gCalYearEnd = gCalYear + 1;
+                };
+                
+                let gCalEnd =`${gCalYearEnd}-${gCalMonthEnd}-${gCalEndDayOutput}T00:00:00+00:00`
+                
+               
                 // Calendar | Get Events
                 const getEvents = async (dateTimeStart, dateTimeEnd) => {
 
