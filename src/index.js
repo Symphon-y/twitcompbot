@@ -3,7 +3,8 @@ require('dotenv').config();
 // General Dependencies
 const Discord = require('discord.js');
 const {google} = require('googleapis');
-const PORT = process.env.PORT || 5000;
+
+
 
 
 const {
@@ -259,7 +260,7 @@ client.once('ready', () =>{
         gcalRequest();
         }
     })
-});
+}).listen(process.env.PORT || 5000);
 
 
 
