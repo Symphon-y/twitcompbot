@@ -23,7 +23,7 @@
     "email": "travisredden@outlook.com"
   },
   "author": "Travis Redden",
-  "license": "BSD-3-Clause",
+  "license": "MIT",
   "devDependencies": {
     "@types/node-fetch": "^2.6.1",
     "@types/twitter": "^1.7.1",
