@@ -3,7 +3,7 @@ require('dotenv').config();
 // General Dependencies
 const Discord = require('discord.js');
 const {google} = require('googleapis');
-const PORT = process.env.PORT || 5000;
+const cron = require('cron');
 
 
 const {
@@ -53,8 +53,14 @@ var T = new Twit({
 // Automatic Twitter Search 
 client.once('ready', () =>{
 
+    console.log(`Online as ${client.user.tag}`);
+
     client.on('message', message =>{
         if (message.content === `${prefix}setfeed`){
+
+            let scheduledTweets = new cron.CronJob('00 00 09 * * *', () => {
+                getRequest();
+            });
     
             let tweetCache = {}
 
@@ -141,17 +147,20 @@ client.once('ready', () =>{
                     sendTweet(compositionContestData);
                 })
 
-                // Search Every 12 Hours
-                setInterval(function(){
-                    getRequest();
-                }, 100*43200);
             }
-            getRequest();
+
+            scheduledTweets.start();
+            console.log("Twitter Feed Set")
         }
     });
 
     client.on('message', message =>{
+
         if(message.content === `${prefix}setcal`){
+
+            let scheduledCalEvents = new cron.CronJob('00 30 09 * * *', () => {
+                gcalRequest();
+            });
 
             let calCache = {}
 
@@ -251,12 +260,10 @@ client.once('ready', () =>{
 
 
 
-             // Search Every 24 Hours
-             setInterval(function(){
-                gcalRequest();
-            }, 200*43200);
+
         }
-        gcalRequest();
+        scheduledCalEvents.start();
+        console.log("Google Calendar Feed Set")
         }
     })
 });
