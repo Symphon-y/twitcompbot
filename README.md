@@ -1,6 +1,6 @@
 # TwitCompBot
 
-TwitCompBot is a discord bot that can help the aspiring composer easily find music composition contests by searching twitter everyday for new composition contest tweets. TwitCompBot also has google calendar functionality to automatically post events into a channel from a google calendar of your choice, and finally it has the ability to search twitter for recent tweets from a custom search defined by the $search [search term] function.
+TwitCompBot is a discord bot that can help the aspiring composer easily find music composition contests by searching twitter everyday for new composition contests. TwitCompBot also has google calendar functionality to automatically post events into a channel from a google calendar of your choice, and finally it has the ability to search twitter for recent tweets from a custom search defined by the $search [search term] function.
 
 ## Installation
 
